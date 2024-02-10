@@ -1,0 +1,54 @@
+{
+    "app-id": "dev.zed.Industries",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "45",
+    "sdk": "org.gnome.Sdk",
+    "sdk-extensions": [
+        "org.freedesktop.Sdk.Extension.rust-stable",
+        "org.freedesktop.Sdk.Extension.llvm16"
+    ],
+    "command": "fractal",
+    "finish-args": [
+        "--share=network",
+        "--share=ipc",
+        "--socket=fallback-x11",
+        "--socket=wayland",
+        "--socket=pulseaudio",
+        "--device=dri",
+        "--env=RUST_LOG=fractal=info,warn"
+    ],
+    "build-options": {
+        "append-ld-library-path": "/usr/lib/sdk/llvm16/lib",
+        "append-path": "/usr/lib/sdk/llvm16/bin:/usr/lib/sdk/rust-stable/bin"
+    },
+    "modules": [
+        {
+            "name": "tree-sitter",
+            "buildsystem": "simple",
+            "build-commands": [
+                "mkdir -p /app/lib/tree-sitter"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/tree-sitter/tree-sitter",
+                    "commit": "1d8975319c2d5de1bf710e7e21db25b0eee4bc66"
+                }
+            ]
+        },
+        {
+            "name": "zed",
+            "buildsystem": "simple",
+            "build-commands": [
+                "cargo run --release"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/zed-industries/zed/archive/refs/tags/v0.121.7.tar.gz",
+                    "sha256": "0249fb53cf704fbb39d245e676cf911d73f2bcab3a5db3157d6502fe87e97d7b"
+                }
+            ]
+        }
+    ]
+}
